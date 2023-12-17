@@ -18,6 +18,9 @@
                   {{key}} : {{value}}
                {% endfor %}
           </li>
+          <form action = " {{url_for('delete_item', product_id = row['product_id'])}}" method = "POST"> 
+              <button type = "submit" value = "Submit"> Delete </button>
+          </form>
           {% endfor %}
        </ul>
        <div>

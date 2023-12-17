@@ -95,19 +95,27 @@ def view_cart():
         
     cursor.execute("SELECT SUM(price) FROM cart")
     total = cursor.fetchall()
-    extract_total = [num[0] for num in total]
+    extract_total = [int(num[0]) for num in total]
+    extract_total_from_list = extract_total[0]
+    
     
             
-    return render_template("cart.html", products_in_cart = product_list_cart, total_price = extract_total)
+    return render_template("cart.html", products_in_cart = product_list_cart, total_price = extract_total_from_list)
 
 
-cursor.execute("SELECT SUM(price) FROM cart")
-total = cursor.fetchall()
-extract_total = [int(num[0]) for num in total]
-print(extract_total)
+@app.route("/delete_item/<product_id>" , methods = ["GET", "POST"])
+def delete_item(product_id):
+    if request.method == "POST":
+        cursor.execute("DELETE FROM cart WHERE product_id = %s",
+                       (product_id, ))
+        
+        db.commit() 
+
+        return redirect(url_for('view_cart'))
     
+   
 
 
     
-#if __name__ == ("__main__"):
-    #app.run(debug= True, use_reloader = False)
+if __name__ == ("__main__"):
+    app.run(debug= True, use_reloader = False)
