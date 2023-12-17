@@ -80,9 +80,22 @@ def add_to_cart(product_id):
 
 @app.route("/cart", methods = ["GET", "POST"])
 def view_cart():
-    return render_template("cart.html")
+    cursor.execute("SELECT * FROM cart")
+    all_rows = cursor.fetchall()
+    
+    col_names = [name [0]for name in cursor.description]
+    product_list_cart = []
+    
+    for row in all_rows:
+        product_dict = {}
+        
+        for col_name, value in zip(col_names, row):
+            product_dict[col_name] = value
+        product_list_cart.append(product_dict)
+            
+    return render_template("cart.html", products_in_cart = product_list_cart)
     
 
-                
+
 if __name__ == ("__main__"):
     app.run(debug= True, use_reloader = False)

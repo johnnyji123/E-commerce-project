@@ -12,11 +12,15 @@
       Cart page 
       </h2>
       <ul>
-        
-          
+          {% for row in products_in_cart %}
+          <li>
+              {% for key, value in row.items() %}
+                  {{key}} : {{value}}
+               {% endfor %}
           </li>
-      
+          {% endfor %}
        </ul>
+       
    
 	<script src="index.js"></script>
   </body>
