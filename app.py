@@ -56,24 +56,13 @@ def add_to_cart(product_id):
                        (product_id, ))
         
         product_information = cursor.fetchall() 
-        # convert tuple to dictionary
-        col_names = [name [0] for name in cursor.description]
-        to_dict = []
+            
         for row in product_information:
-            my_dict = {}
-            for col_name, value in zip(col_names, row):
-                my_dict[col_name] = value
-                
-            to_dict.append(my_dict) 
-                
-        
-     
-        for row in to_dict:
             cursor.execute("INSERT INTO cart (product_id, name, price, quantity) VALUES (%s, %s, %s, %s)",
-                           (row['product_id'], row['name'], row['price'], row['quantity']))
+                           (row[0], row[1], row[2], row[3]))
             
             db.commit()
-                    
+            
                 
         return redirect(url_for('products_page'))
         
@@ -115,7 +104,7 @@ def delete_item(product_id):
     
    
 
-
+# handle if cart items == 0 then print no items in cart
     
 if __name__ == ("__main__"):
-    app.run(debug= True, use_reloader = False)
+    app.run(debug= True, use_reloader = False)  
