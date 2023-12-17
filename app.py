@@ -21,20 +21,28 @@ cursor = db.cursor()
 app = Flask(__name__)
 
 
-products = [
-        ("Marco 1/4 resin", 360, 1),
-        ("Aokiji 1/6 resin", 440, 1),
-        ("Blackbeard sd resin", 280, 1)
-    
-    ]
-
-
-
-    
 @app.route("/")
 def products_page():
-    return render_template("products.html")
+    cursor.execute("SELECT * FROM products")
+    
+    col_names_list = []
+    product_list = []
+    
+    col_names = cursor.description
+    for x in col_names:
+        col_names_list.append(x[0])
+
+    all_rows = cursor.fetchall()    
+    for row in all_rows:
+        my_dict = {}
+        for col_name, value in zip(col_names_list, row):
+            my_dict[col_name] = value
+            product_list.append(my_dict)
+    
+    return render_template("products.html", product_list = product_list)
 
 
-#if __name__ == ("__main__"):
-   # app.run(debug= True, use_reloader = False)
+
+    
+if __name__ == ("__main__"):
+    app.run(debug= True, use_reloader = False)
