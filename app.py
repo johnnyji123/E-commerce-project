@@ -16,6 +16,7 @@ cursor = db.cursor()
 
 
 # table products
+# table cart
 
     
 app = Flask(__name__)
@@ -27,6 +28,7 @@ def products_page():
     
     col_names_list = []
     product_list = []
+    product_list_duplicates_removed = []
     
     col_names = cursor.description
     for x in col_names:
@@ -35,14 +37,47 @@ def products_page():
     all_rows = cursor.fetchall()    
     for row in all_rows:
         my_dict = {}
+        
         for col_name, value in zip(col_names_list, row):
             my_dict[col_name] = value
-            product_list.append(my_dict)
+        product_list.append(my_dict)
+                
+    
     
     return render_template("products.html", product_list = product_list)
 
 
+@app.route("/cart/<product_id>", methods = ["GET", "POST"])
+def add_to_cart(product_id):
+    if request.method == "POST":
+        
+        cursor.execute("SELECT * FROM products WHERE product_id = %s", 
+                       (product_id, ))
+        
+        product_information = cursor.fetchall() 
+        # convert tuple to dictionary
+        col_names = [name [0] for name in cursor.description]
+        to_dict = []
+        for row in product_information:
+            my_dict = {}
+            for col_name, value in zip(col_names, row):
+                my_dict[col_name] = value
+                
+            to_dict.append(my_dict) 
+                
+        
+     
+        for row in to_dict:
+            for key, value in row.items():
+                cursor.execute("INSERT INTO cart (product_id, name, price, quantity) VALUES (%s, %s, %s, %s)",
+                               (row['product_id'], row['name'], row['price'], row['quantity']))
+            db.commit()
+                    
+            
+        return render_template("cart.html", product_information = to_dict)
+        
 
-    
+
+                
 if __name__ == ("__main__"):
     app.run(debug= True, use_reloader = False)

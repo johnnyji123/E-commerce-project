@@ -18,7 +18,9 @@
                   {% for key, value in row.items() %}
                       {{key}} : {{value}}
                    {% endfor %}
-                    <button type = "button"> Add to cart</button>
+                   <form action = "{{url_for('add_to_cart', product_id = row['product_id'])}}" method = "POST">
+                    <button type = "submit" value = "Submit"> Add to cart</button>
+                    </form>
               {% endfor%}
          
 
