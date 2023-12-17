@@ -92,10 +92,22 @@ def view_cart():
         for col_name, value in zip(col_names, row):
             product_dict[col_name] = value
         product_list_cart.append(product_dict)
+        
+    cursor.execute("SELECT SUM(price) FROM cart")
+    total = cursor.fetchall()
+    extract_total = [num[0] for num in total]
+    
             
-    return render_template("cart.html", products_in_cart = product_list_cart)
+    return render_template("cart.html", products_in_cart = product_list_cart, total_price = extract_total)
+
+
+cursor.execute("SELECT SUM(price) FROM cart")
+total = cursor.fetchall()
+extract_total = [int(num[0]) for num in total]
+print(extract_total)
     
 
 
-if __name__ == ("__main__"):
-    app.run(debug= True, use_reloader = False)
+    
+#if __name__ == ("__main__"):
+    #app.run(debug= True, use_reloader = False)
