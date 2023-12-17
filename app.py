@@ -17,27 +17,20 @@ cursor = db.cursor()
 
 # table products
 
-
+    
 app = Flask(__name__)
 
-lst = []
 
-for x in range(3):
-    random_id = "".join(random.choices(string.ascii_uppercase, k = 6))
-    lst.append(random_id)
+products = [
+        ("Marco 1/4 resin", 360, 1),
+        ("Aokiji 1/6 resin", 440, 1),
+        ("Blackbeard sd resin", 280, 1)
     
-values = [
-        (lst[0], ),
-        (lst[1], ),
-        (lst[2], )
-        
     ]
-    
-    
-add = "INSERT INTO products (product_id) VALUES (%s)"
-cursor.executemany(add, values)
-db.commit()
 
+
+
+    
 @app.route("/")
 def products_page():
     return render_template("products.html")
