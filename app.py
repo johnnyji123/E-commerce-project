@@ -1,6 +1,7 @@
 import mysql.connector
 from flask import Flask, render_template
 from flask import request
+from flask import redirect, url_for
 import random
 import string
 
@@ -47,7 +48,7 @@ def products_page():
     return render_template("products.html", product_list = product_list)
 
 
-@app.route("/cart/<product_id>", methods = ["GET", "POST"])
+@app.route("/<product_id>", methods = ["GET", "POST"])
 def add_to_cart(product_id):
     if request.method == "POST":
         
@@ -68,15 +69,19 @@ def add_to_cart(product_id):
         
      
         for row in to_dict:
-            for key, value in row.items():
-                cursor.execute("INSERT INTO cart (product_id, name, price, quantity) VALUES (%s, %s, %s, %s)",
-                               (row['product_id'], row['name'], row['price'], row['quantity']))
+            cursor.execute("INSERT INTO cart (product_id, name, price, quantity) VALUES (%s, %s, %s, %s)",
+                           (row['product_id'], row['name'], row['price'], row['quantity']))
+            
             db.commit()
                     
-            
-        return render_template("cart.html", product_information = to_dict)
+                
+        return redirect(url_for('products_page'))
         
 
+@app.route("/cart", methods = ["GET", "POST"])
+def view_cart():
+    return render_template("cart.html")
+    
 
                 
 if __name__ == ("__main__"):
