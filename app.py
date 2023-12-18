@@ -139,6 +139,5 @@ def remove_item(product_id):
 
 
 
-
-if __name__ == ("__main__"):
-    app.run(debug= True, use_reloader = False)  
+#if __name__ == ("__main__"):
+    #app.run(debug= True, use_reloader = False)  
