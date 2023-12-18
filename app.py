@@ -11,8 +11,7 @@ db = mysql.connector.connect(
     host = "localhost",
     user = "root",
     password = "password",
-    database = "Ecommerce_db"
-    
+    database = "Ecommerce_db"  
     )
 
 # Creating a cursor object
@@ -49,9 +48,7 @@ def products_page():
         for col_name, value in zip(col_names_list, row):
             my_dict[col_name] = value
         product_list.append(my_dict)
-                
-    
-    
+        
     return render_template("products.html", product_list = product_list)
 
 
@@ -72,7 +69,6 @@ def add_to_cart(product_id):
             
             db.commit()
             
-                
         return redirect(url_for('products_page'))
         
 
@@ -107,9 +103,6 @@ def view_cart():
             
             return render_template("cart.html", products_in_cart = product_list_cart, total_price = extract_total_from_list)
         
-    
-            
-    
   
 
 # Endpoint that allows you to delete items in cart
@@ -161,8 +154,6 @@ def checkout():
         
         db.commit()
         return render_template("checkout.html")
-    
-   
     
     return render_template("checkout.html")
 
