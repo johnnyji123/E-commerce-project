@@ -11,6 +11,15 @@
       <h2>
       Cart page 
       </h2>
+      <div>
+          {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                  {% for message in messages %}
+                      <h2>{{message}}</h2>
+                  {% endfor %}
+               {% endif %}
+           {% endwith %}
+      </div>
       <ul>
           {% for row in products_in_cart %}
           <li>

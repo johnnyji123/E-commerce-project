@@ -4,6 +4,7 @@ from flask import request
 from flask import redirect, url_for
 import random
 import string
+from flask import flash
 
 db = mysql.connector.connect(
     host = "localhost",
@@ -21,6 +22,7 @@ cursor = db.cursor()
 
     
 app = Flask(__name__)
+app.secret_key = "123123123"
 
 
 @app.route("/")
@@ -69,27 +71,38 @@ def add_to_cart(product_id):
 
 @app.route("/cart", methods = ["GET", "POST"])
 def view_cart():
-    cursor.execute("SELECT * FROM cart")
-    all_rows = cursor.fetchall()
     
-    col_names = [name [0]for name in cursor.description]
-    product_list_cart = []
-    
-    for row in all_rows:
-        product_dict = {}
+    cursor.execute("SELECT COUNT(*) FROM cart")
+    for x in cursor:
+        if x[0] == 0:
+            flash("Your cart is empty !")
+            return render_template("cart.html")
         
-        for col_name, value in zip(col_names, row):
-            product_dict[col_name] = value
-        product_list_cart.append(product_dict)
+        else:
+            cursor.execute("SELECT * FROM cart")
+            all_rows = cursor.fetchall()
+            
+            col_names = [name [0]for name in cursor.description]
+            product_list_cart = []
+            
+            for row in all_rows:
+                product_dict = {}
+                
+                for col_name, value in zip(col_names, row):
+                    product_dict[col_name] = value
+                product_list_cart.append(product_dict)
+                
+            cursor.execute("SELECT SUM(price) FROM cart")
+            total = cursor.fetchall()
+            extract_total = [int(num[0]) for num in total]
+            extract_total_from_list = extract_total[0]
+            
+            return render_template("cart.html", products_in_cart = product_list_cart, total_price = extract_total_from_list)
         
-    cursor.execute("SELECT SUM(price) FROM cart")
-    total = cursor.fetchall()
-    extract_total = [int(num[0]) for num in total]
-    extract_total_from_list = extract_total[0]
-    
     
             
-    return render_template("cart.html", products_in_cart = product_list_cart, total_price = extract_total_from_list)
+    
+  
 
 
 @app.route("/delete_item/<product_id>" , methods = ["GET", "POST"])
@@ -103,6 +116,7 @@ def delete_item(product_id):
         return redirect(url_for('view_cart'))
     
    
+
 
 # handle if cart items == 0 then print no items in cart
     
