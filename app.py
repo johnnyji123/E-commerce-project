@@ -116,9 +116,16 @@ def delete_item(product_id):
         return redirect(url_for('view_cart'))
     
    
-
-
-# handle if cart items == 0 then print no items in cart
+@app.route("/add_quantity/<product_id>", methods = ["GET", "POST"])
+def add_item(product_id):
+    cursor.execute("UPDATE cart SET quantity = (quantity + 1) WHERE product_id = %s",
+                   (product_id, ))
     
+    db.commit()
+            
+    return redirect(url_for('view_cart'))
+    
+
+
 if __name__ == ("__main__"):
     app.run(debug= True, use_reloader = False)  
