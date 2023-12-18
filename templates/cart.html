@@ -27,15 +27,15 @@
                   {{key}} : {{value}}
                {% endfor %}
           </li>
-          <form action = " {{url_for('delete_item', product_id = row['product_id'])}}" method = "POST"> 
+          <form action = "{{url_for('delete_item', product_id = row['product_id'])}}" method = "POST"> 
               <button type = "submit" value = "Submit"> Delete </button>
           </form>
           
-          <form action = "{{url_for('add_item', product_id = row['product_id'])}}">
+          <form action = "{{url_for('add_item', product_id = row['product_id'])}}" method = "POST">
               <button type = "submit" value = "Submit"> Add item </button>
           </form>
           
-          <form action = "{{url_for('remove_item', product_id = row['product_id'])}}">
+          <form action = "{{url_for('remove_item', product_id = row['product_id'])}}" method = "POST">
               <button type = "submit" value = "Sumit"> Remove item </button>
           </form>
           {% endfor %}

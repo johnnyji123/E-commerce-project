@@ -115,10 +115,11 @@ def delete_item(product_id):
 
         return redirect(url_for('view_cart'))
     
+    
    
 @app.route("/add_quantity/<product_id>", methods = ["GET", "POST"])
 def add_item(product_id):
-    cursor.execute("UPDATE cart SET quantity = (quantity + 1), price = (price + %s) WHERE product_id = %s",
+    cursor.execute("UPDATE cart SET quantity = (quantity + 1), total_price = (price * quantity) WHERE product_id = %s",
                    (product_id, ))
     
     db.commit()
@@ -128,7 +129,7 @@ def add_item(product_id):
 
 @app.route("/remove_quantity/<product_id>", methods = ["GET", "POST"])
 def remove_item(product_id):
-    cursor.execute("UPDATE cart SET quantity = quantity - 1 WHERE product_id = %s",
+    cursor.execute("UPDATE cart SET quantity = (quantity - 1), total_price = (price * quantity) WHERE product_id = %s",
                    (product_id, ))
     
     db.commit()
@@ -136,8 +137,8 @@ def remove_item(product_id):
     return redirect(url_for('view_cart'))
 
 
-cursor.execute("ALTER TABLE cart ADD total_price INTEGER")
-db.commit()
 
-#if __name__ == ("__main__"):
-    #app.run(debug= True, use_reloader = False)  
+
+
+if __name__ == ("__main__"):
+    app.run(debug= True, use_reloader = False)  
