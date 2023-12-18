@@ -118,14 +118,26 @@ def delete_item(product_id):
    
 @app.route("/add_quantity/<product_id>", methods = ["GET", "POST"])
 def add_item(product_id):
-    cursor.execute("UPDATE cart SET quantity = (quantity + 1) WHERE product_id = %s",
+    cursor.execute("UPDATE cart SET quantity = (quantity + 1), price = (price + %s) WHERE product_id = %s",
                    (product_id, ))
     
     db.commit()
-            
+                
     return redirect(url_for('view_cart'))
     
 
+@app.route("/remove_quantity/<product_id>", methods = ["GET", "POST"])
+def remove_item(product_id):
+    cursor.execute("UPDATE cart SET quantity = quantity - 1 WHERE product_id = %s",
+                   (product_id, ))
+    
+    db.commit()
+    
+    return redirect(url_for('view_cart'))
 
-if __name__ == ("__main__"):
-    app.run(debug= True, use_reloader = False)  
+
+cursor.execute("ALTER TABLE cart ADD total_price INTEGER")
+db.commit()
+
+#if __name__ == ("__main__"):
+    #app.run(debug= True, use_reloader = False)  

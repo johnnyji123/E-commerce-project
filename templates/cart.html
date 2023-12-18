@@ -35,7 +35,7 @@
               <button type = "submit" value = "Submit"> Add item </button>
           </form>
           
-          <form>
+          <form action = "{{url_for('remove_item', product_id = row['product_id'])}}">
               <button type = "submit" value = "Sumit"> Remove item </button>
           </form>
           {% endfor %}
