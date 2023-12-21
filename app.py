@@ -86,7 +86,7 @@ def view_cart():
             cursor.execute("SELECT * FROM cart")
             all_rows = cursor.fetchall()
             
-            col_names = [name [0]for name in cursor.description]
+            col_names = [name[0] for name in cursor.description]
             product_list_cart = []
             
             for row in all_rows:
